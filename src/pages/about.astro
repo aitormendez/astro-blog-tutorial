@@ -1,6 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
-const pageTitle = "About Me";
+import { manifest } from "astro:ssr-manifest";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "About me";
+
 const identity = {
   firstName: "Sarah",
   country: "Canada",
@@ -13,26 +16,55 @@ const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Writing Docs"];
 const happy = true;
 const finished = false;
 const goal = 2;
+
+const skillColor = "navy";
+const fontWeight = 100;
+const textCase = "uppercase";
 ---
-<Layout title="Welcome to Astro.">
-	<main>
-        <p>Here are a few facts about me:</p>
-        <ul>
-          <li>My name is {identity.firstName}.</li>
-          <li>I live in {identity.country} and I work as a {identity.occupation}.</li>
-          {identity.hobbies.length >= 2 &&
-            <li>Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}</li>
-          }
-        </ul>
-        <p>My skills are:</p>
-        <ul>
-          {skills.map((skill) => <li>{skill}</li>)}
-        </ul>
 
-        {happy && <p>I am happy to be learning Astro!</p>}
+<BaseLayout pageTitle={pageTitle}>
+  <main>
+    <p>Here are a few facts about me:</p>
+    <ul>
+      <li>My name is {identity.firstName}.</li>
+      <li>
+        I live in {identity.country} and I work as a {identity.occupation}.
+      </li>
+      {
+        identity.hobbies.length >= 2 && (
+          <li>
+            Two of my hobbies are: {identity.hobbies[0]} and{" "}
+            {identity.hobbies[1]}
+          </li>
+        )
+      }
+    </ul>
+    <p>My skills are:</p>
+    <ul>
+      {skills.map((skill) => <li class="skill">{skill}</li>)}
+    </ul>
 
-{finished && <p>I finished this tutorial!</p>}
+    {happy && <p>I am happy to be learning Astro!</p>}
 
-{goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
-	</main>
-</Layout>
+    {finished && <p>I finished this tutorial!</p>}
+
+    {
+      goal === 3 ? (
+        <p>My goal is to finish in 3 days.</p>
+      ) : (
+        <p>My goal is not 3 days.</p>
+      )
+    }
+  </main>
+  <style define:vars={{ skillColor, fontWeight, textCase }}>
+    h1 {
+      color: purple;
+      font-size: 4rem;
+    }
+    .skill {
+      color: var(--skillColor);
+      font-weight: var(--fontWeight);
+      text-transform: var(--textCase);
+    }
+  </style>
+</BaseLayout>
